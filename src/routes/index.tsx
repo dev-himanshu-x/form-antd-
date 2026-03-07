@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import "../App.css";
-import { useState } from "react";
-import { Button, Form, Input, Select, Divider, Space, Row } from "antd";
+import { useState, useEffect } from "react";
+import { Button, Form, Input, Select, Divider } from "antd";
 import type { DefaultOptionType } from "antd/es/select";
 import Mark from "./details";
 import type { GetProps } from "antd";
@@ -46,26 +46,28 @@ function Data() {
     enabled: pin.length === 6,
   });
 
-  if (data && data[0].PostOffice.length > 0) {
-    setPostOffices(data[0].PostOffice);
-    setOptions(
-      data[0].PostOffice.map((po: any) => ({
-        value: po.Name,
-      })),
-    );
-    setbtndisabled(false);
-    setPin("");
-    form.setFieldsValue({
-      address: {
-        post_office: {
-          post_office: "",
-          state: "",
-          district: "",
-          city: "",
+  useEffect(() => {
+    if (data && data[0]?.PostOffice?.length > 0) {
+      setPostOffices(data[0].PostOffice);
+      setOptions(
+        data[0].PostOffice.map((po: any) => ({
+          value: po.Name,
+        })),
+      );
+      setbtndisabled(false);
+      setPin("");
+      form.setFieldsValue({
+        address: {
+          post_office: {
+            post_office: "",
+            state: "",
+            district: "",
+            city: "",
+          },
         },
-      },
-    });
-  }
+      });
+    }
+  }, [data]);
 
   const change = (value: string) => {
     const selected = postOffices.find((po) => po.Name === value);
@@ -96,8 +98,7 @@ function Data() {
       >
         <Divider titlePlacement="start">Address</Divider>
 
-        <Space>
-          <Row gutter={[6, 20]}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
             <Form.Item
               label="Pincode"
               rules={[{ required: true, message: "Field can not be empty" }]}
@@ -150,8 +151,7 @@ function Data() {
                 placeholder="Home Address"
               />
             </Form.Item>
-          </Row>
-        </Space>
+        </div>
 
         <Divider titlePlacement="start">Academic Details</Divider>
 
@@ -168,7 +168,7 @@ function Data() {
                       subField,
                       index,
                       subOpt,
-                      form: { form },
+                      form,
                     }}
                   />
                 ))}

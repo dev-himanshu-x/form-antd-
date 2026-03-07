@@ -3,7 +3,7 @@ import { CloseOutlined } from "@ant-design/icons";
 
 function Mark({ field }: any) {
   const marks = Form.useWatch(
-    ["academic detail", field.index, "marks"],
+    ["academic detail", field.subField.name, "marks"],
     field.form,
   );
 
